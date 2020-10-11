@@ -21,10 +21,12 @@ Route::prefix('/')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
     Route::view('/about', 'about')->name('about');
     Route::view('/contacts', "contacts")->name('contacts');
-    Route::get('/login', function() {
-        return view('auth.login');
-    } )->name('login');
     Route::view('/vue', 'vue')->name('vue');
+});
+
+Route::prefix('/')->group(function() {
+    Route::view('/login', 'auth.login')->name('login');
+    Route::view('/register', 'auth.register')->name('register');
 });
 
 Route::prefix("/news")->name('news.')->group(function () {
