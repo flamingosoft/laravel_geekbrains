@@ -1,5 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\News\Category\NewsCategoryController;
+use App\Http\Controllers\News\NewsController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,10 +17,28 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::prefix('/')->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+    Route::view('/about', 'about')->name('about');
+    Route::view('/contacts', "contacts")->name('contacts');
+    Route::get('/login', function() {
+        return view('auth.login');
+    } )->name('login');
+    Route::view('/vue', 'vue')->name('vue');
 });
 
-Auth::routes();
+Route::prefix("/news")->name('news.')->group(function () {
+    Route::get('/', [NewsController::class, 'index'])->name('home');
+    Route::get('/news:{newsId}', [NewsController::class, 'news'])->name('byId');
 
-Route::get('/home', 'HomeController@index')->name('home');
+    Route::prefix('/category')->name('category.')->group(function () {
+        Route::get('/', [NewsCategoryController::class, 'index'])->name('home');
+        Route::get('/{categorySlug}', [NewsCategoryController::class, 'getAllNewsByCategorySlug'])->name('bySlug');
+    });
+});
+
+Route::prefix("/admin")->name('admin.')->group(function () {
+    Route::get('/', [AdminController::class, 'index'])->name('home');               // admin.home on /admin/
+    Route::get('/addnews', [AdminController::class, 'addNews'])->name('addNews');   // admin.news on /admin/addNews
+});
+
