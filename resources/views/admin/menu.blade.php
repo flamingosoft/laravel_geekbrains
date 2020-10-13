@@ -1,4 +1,7 @@
 
-<a class="p-2 text-dark" href="{{ route('home') }}">на Главную страницу</a>
-<a class="p-2 text-dark" href="{{ route('admin.home') }}">главная админка</a>
-<a class="p-2 text-dark" href="{{ route('admin.addNews') }}">Добавить новость</a>
+<li class="nav-item"><a class="nav-link {{ request()->routeIs('home')?'active':'' }}" href="{{ route('home') }}">{{ __('Главная') }}</a></li>
+<li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.home')?'active':'' }}" href="{{ route('admin.home') }}">{{ __('Админка') }}</a></li>
+<li class="nav-item"><a class="nav-link {{ request()->routeIs('admin.addNews')?'active':'' }}" href="{{ route('admin.addNews') }}">{{ __('Добавить новость') }}</a></li>
+
+<li class="nav-item"><a class="nav-link" href="{{ route('login') }}">{{ __('Залогиниться') }}</a></li>
+<li class="nav-item"><a class="nav-link" href="{{ route('register') }}">{{ __('Зарегаться') }}</a></li>

@@ -6,13 +6,13 @@
 
 @section('content')
 
-        <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-            <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                <h1>Vue!</h1>
-            </div>
+    <div class="col-md-6 blog-main">
+        <div class="blog-post">
+            <h2 class="blog-post-title">{{ __('Vue!') }} </h2>
+        </div>
 
-            <div id="app" class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                <example-component></example-component>
-            </div>
-
+        <div class="blog-post">
+            <example-component></example-component>
+        </div>
+    </div>
 @endsection
