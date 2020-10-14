@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AdminAddNewsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\News\Category\NewsCategoryController;
 use App\Http\Controllers\News\NewsController;
@@ -41,6 +42,6 @@ Route::prefix("/news")->name('news.')->group(function () {
 
 Route::prefix("/admin")->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('home');               // admin.home on /admin/
-    Route::any('/addnews', [AdminController::class, 'addNews'])->name('addNews');   // admin.news on /admin/addNews
+    Route::any('/addnews', 'Admin\AdminAddNewsController')->name('addNews');   // admin.news on /admin/addNews
 });
 

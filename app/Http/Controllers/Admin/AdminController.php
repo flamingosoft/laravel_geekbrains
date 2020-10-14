@@ -12,8 +12,4 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
-    public function addNews() {
-        return view('admin.addNews')
-            ->with('categories', Categories::getAllCategories());
-    }
 }
