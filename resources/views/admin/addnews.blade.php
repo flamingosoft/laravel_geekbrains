@@ -13,7 +13,8 @@
 
         <div class="blog-post">
 
-            <form name="addNews" action="{{ route('admin.addNews') }}">
+            <form name="addNews" method="POST" action="{{ url()->current() }}">
+                @csrf
                 <div class="form-group">
                     <label for="title">Заголовок новости</label>
                     <input type="text" class="form-control" id="title" placeholder="Заголовок новости">
@@ -32,6 +33,9 @@
                 <div class="form-group">
                     <label for="message">Описание новости</label>
                     <textarea class="form-control" id="message" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="{{ __('Создать новость') }}">
                 </div>
             </form>
         </div>

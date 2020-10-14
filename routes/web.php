@@ -41,6 +41,6 @@ Route::prefix("/news")->name('news.')->group(function () {
 
 Route::prefix("/admin")->name('admin.')->group(function () {
     Route::get('/', [AdminController::class, 'index'])->name('home');               // admin.home on /admin/
-    Route::get('/addnews', [AdminController::class, 'addNews'])->name('addNews');   // admin.news on /admin/addNews
+    Route::any('/addnews', [AdminController::class, 'addNews'])->name('addNews');   // admin.news on /admin/addNews
 });
 
