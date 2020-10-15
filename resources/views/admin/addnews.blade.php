@@ -17,12 +17,12 @@
                 @csrf
                 <div class="form-group">
                     <label for="title">Заголовок новости</label>
-                    <input type="text" class="form-control" id="title" placeholder="Заголовок новости">
+                    <input type="text" class="form-control" name="title" id="title" placeholder="Заголовок новости">
                 </div>
                 @if($categories)
                     <div class="form-group">
                         <label for="category">Категория</label>
-                        <select class="form-control" id="category">
+                        <select class="form-control" id="category" name="category">
                             @foreach($categories as $category)
                                 <option value="{{ $category['slug'] }}">{{ $category['title'] }}</option>
                             @endforeach
@@ -32,7 +32,11 @@
                 @endif
                 <div class="form-group">
                     <label for="message">Описание новости</label>
-                    <textarea class="form-control" id="message" rows="3"></textarea>
+                    <textarea class="form-control" id="message" rows="3" name="message"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="private">Для зарегистрированных</label>
+                    <input type="checkbox" value="private" id="private" name="private" checked>
                 </div>
                 <div class="form-group">
                     <input type="submit" value="{{ __('Создать новость') }}">
