@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Categories;
+use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
@@ -12,15 +13,25 @@ class AdminAddNewsController extends Controller
 {
     public function __invoke(Request $request, Response $response)
     {
-        if ($request->method() == "POST") {
-            // получаем данные из формы
-            $title = $request->title;
-            $category = $request->category;
-            $notes = $request->notes;
-            $private = $request->private === "private";
+        // TODO: save data to file and redirect to this news
 
-            dd($request->except(['_token']));
-            return redirect($request->url());
+        if ($request->method() == "POST") {
+
+            $id = News::addNews(
+                $request->title,
+                $request->category,
+                $request->message,
+                $request->private
+            );
+
+            // получаем данные из формы
+            $request->flash();
+
+            return redirect(route('news.byId', $id));
+//            return redirect(route('admin.addNews', ['wrongTitle', 'Wrong']));
+//            return view('admin.addNews')
+//                ->with('categories', Categories::getAllCategories())
+//                ->with('wrongTitle', 'Wrong');
         }
         return view('admin.addNews')
             ->with('categories', Categories::getAllCategories());

@@ -10,6 +10,21 @@ class News
 {
     static private $data = null;
 
+    public static function addNews($title, $category, $message, $private): int
+    {
+        $data = News::getData();
+        $id = array_push($data,
+            ['id' => 1 + max(array_keys($data)),
+                'title' => $title,
+                'categoryId' => Categories::getCategoryByTitle($category),
+                'message' => $message,
+                'private' => $private == "private"
+            ]
+        );
+        News::setData($data);
+        return --$id;
+    }
+
     private static function initData(): void
     {
         try {
@@ -40,6 +55,7 @@ class News
     public static function setData(array $Data)
     {
         static::$data = $Data;
+        static::save();
     }
 
     public static function save(): void
