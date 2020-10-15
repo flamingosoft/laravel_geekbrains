@@ -5,7 +5,6 @@
 @endsection
 
 @section('content')
-
     <div class="col-md-6 blog-main">
         <div class="blog-post">
             @if($categories)

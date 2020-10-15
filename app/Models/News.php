@@ -3,36 +3,59 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 
 class News
 {
-    static private $newsData = null;
+    static private $data = null;
 
-    private static $storage = [
-        'container' => "repo/news",
-        'driver' => 'local',
-    ];
+    private static function initData(): void
+    {
+        try {
+            if (static::repo()->exists(static::getContainerName())) {
+                static::setData(json_decode(static::repo()->get(static::getContainerName()), true));
+                return;
+            }
+        } catch (FileNotFoundException $e) {
+        }
+        static::setDefault();
+        static::save();
+
+    }
 
     /**
-     * @return \Illuminate\Contracts\Filesystem\Filesystem
+     * @return Filesystem
      */
-    private static function repo() {
-        return Storage::disk(static::$storage['driver']);
+    private static function repo()
+    {
+        return Storage::disk(static::getDriver());
     }
 
-    private static function getData(): array {
-        if (is_null(static::$newsData))
+    public static function getDriver(): string
+    {
+        return 'local';
+    }
+
+    public static function setData(array $Data)
+    {
+        static::$data = $Data;
+    }
+
+    public static function save(): void
+    {
+        Storage::disk(static::getDriver())->put(static::getContainerName(), json_encode(static::getData()));
+    }
+
+    protected static function getData(): array
+    {
+        if (is_null(static::$data))
             static::initData();
-        return static::$newsData;
+        return static::$data;
     }
 
-    private static function save(): void {
-        Storage::disk(static::$storage['driver'])->put(static::$storage['container'], json_encode(static::getData()));
-    }
-
-    private static function setDeafult(): void {
-        static::$newsData = [
+    private static function setDefault(): void {
+        static::setData([
             0 => [
                 'id' => 0,
                 'title' => 'Новость по cpu',
@@ -51,23 +74,12 @@ class News
                 'message' => 'материнки они такие материнки!',
                 'categoryId' => 1
             ]
-        ];
+        ]);
     }
 
-    private static function initData(): void
-    {
-        try {
-            if (self::repo()->exists(static::$storage['container'])) {
-                static::$newsData = json_decode(self::repo()->get(static::$storage['container']));
-                return;
-            }
-        }catch (FileNotFoundException $e) {
-        }
-        static::setDeafult();
-        static::save();
-
+    public static function getContainerName(): string {
+        return 'news';
     }
-
 
     /**
      * Все новости в формате [$newsId][ {'id', 'title', 'message', 'categoryid'} ]
@@ -85,7 +97,7 @@ class News
      */
     public static function getNewsById(int $id): array
     {
-        if (array_key_exists($id, static::$newsData))
+        if (array_key_exists($id, static::getData()))
             return static::getData()[$id];
         else
             return [];

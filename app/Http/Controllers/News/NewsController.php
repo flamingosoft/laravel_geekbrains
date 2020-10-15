@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\News;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\NewsCategoryController;
+use App\Http\Controllers\News\Category\NewsCategoryController;
 use App\Models\Categories;
 use App\Models\News;
 use Illuminate\Contracts\View\Factory;
@@ -29,7 +29,7 @@ class NewsController extends Controller
      * @param $categorySlug
      * @return Factory|View
      */
-    public static function category($categorySlug)
+    public function category($categorySlug)
     {
         return NewsCategoryController::getAllNewsByCategorySlug($categorySlug);
     }
