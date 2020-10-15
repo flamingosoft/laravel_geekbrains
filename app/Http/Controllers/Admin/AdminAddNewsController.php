@@ -17,7 +17,7 @@ class AdminAddNewsController extends Controller
 
         if ($request->method() == "POST") {
 
-            $id = News::addNews(
+            $id = News::factory()->addNews(
                 $request->title,
                 $request->category,
                 $request->message,
@@ -34,6 +34,6 @@ class AdminAddNewsController extends Controller
 //                ->with('wrongTitle', 'Wrong');
         }
         return view('admin.addNews')
-            ->with('categories', Categories::getAllCategories());
+            ->with('categories', Categories::factory()->getAllCategories());
     }
 }

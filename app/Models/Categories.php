@@ -2,32 +2,51 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-class Categories
+class Categories extends Model
 {
-    private static $categoriesData = [
-      0 => [
-          'title' => 'процессоры',
-          'slug' => 'cpu'
-          ],
-      1 => [
-          'title' => 'материнские платы',
-          'slug' => 'motherboards'
-          ],
-      2 => [
-          'title' => 'жетские диски',
-          'slug' => 'hdd'
-          ]
-    ];
+    private static $instance = null;
+
+    public static function factory(): Categories
+    {
+        if (is_null(static::$instance)) {
+            static::$instance = new Categories();
+        }
+        return static::$instance;
+    }
+
+    protected  function getContainerName(): string {
+        return 'categories';
+    }
+
+    protected  function setDefault(): void {
+        $this::setData( [
+            0 => [
+                'id' => 0,
+                'title' => 'процессоры',
+                'slug' => 'cpu'
+            ],
+            1 => [
+                'id' => 1,
+                'title' => 'материнские платы',
+                'slug' => 'motherboards'
+            ],
+            2 => [
+                'id' => 2,
+                'title' => 'жетские диски',
+                'slug' => 'hdd'
+            ]
+        ]);
+    }
+
+
 
     /**
      * все категории в формате [ $categoryId ][ { 'title', 'slug' } ]
      * @return array
      */
-    public static function getAllCategories(): array {
-        return static::$categoriesData;
+    public  function getAllCategories(): array {
+        return $this->getData();
     }
 
     /**
@@ -35,9 +54,9 @@ class Categories
      * @param int $id
      * @return array
      */
-    public static function getCategoryById(int $id): array {
-        if (array_key_exists($id, static::$categoriesData))
-            return static::$categoriesData[$id];
+    public  function getCategoryById(int $id): array {
+        if (array_key_exists($id, $this->getData()))
+            return $this->getData()[$id];
         else
             return [];
     }
@@ -47,7 +66,7 @@ class Categories
      * @param string $slug
      * @return int | FALSE
      */
-    public static function getCategoryByTitle(string $slug): int {
-        return array_search($slug, array_column(static::$categoriesData, 'slug'));
+    public  function getCategoryByTitle(string $slug): int {
+        return array_search($slug, array_column($this->getData(), 'slug'));
     }
 }

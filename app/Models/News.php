@@ -6,17 +6,29 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 
-class News
-{
-    static private $data = null;
 
-    public static function addNews($title, $category, $message, $private): int
+class News extends Model
+{
+    private static $instance = null;
+
+    public static function factory(): News {
+        if (is_null(static::$instance)) {
+            static::$instance = new News();
+        }
+        return static::$instance;
+    }
+
+    protected  function getContainerName(): string {
+        return 'news';
+    }
+
+    public function addNews($title, $category, $message, $private): int
     {
-        $data = News::getData();
+        $data = $this::getData();
         $id = array_push($data,
             ['id' => 1 + max(array_keys($data)),
                 'title' => $title,
-                'categoryId' => Categories::getCategoryByTitle($category),
+                'categoryId' => Categories::factory()->getCategoryByTitle($category),
                 'message' => $message,
                 'private' => $private == "private"
             ]
@@ -25,52 +37,7 @@ class News
         return --$id;
     }
 
-    private static function initData(): void
-    {
-        try {
-            if (static::repo()->exists(static::getContainerName())) {
-                static::setData(json_decode(static::repo()->get(static::getContainerName()), true));
-                return;
-            }
-        } catch (FileNotFoundException $e) {
-        }
-        static::setDefault();
-        static::save();
-
-    }
-
-    /**
-     * @return Filesystem
-     */
-    private static function repo()
-    {
-        return Storage::disk(static::getDriver());
-    }
-
-    public static function getDriver(): string
-    {
-        return 'local';
-    }
-
-    public static function setData(array $Data)
-    {
-        static::$data = $Data;
-        static::save();
-    }
-
-    public static function save(): void
-    {
-        Storage::disk(static::getDriver())->put(static::getContainerName(), json_encode(static::getData()));
-    }
-
-    protected static function getData(): array
-    {
-        if (is_null(static::$data))
-            static::initData();
-        return static::$data;
-    }
-
-    private static function setDefault(): void {
+    protected function setDefault(): void {
         static::setData([
             0 => [
                 'id' => 0,
@@ -93,17 +60,13 @@ class News
         ]);
     }
 
-    public static function getContainerName(): string {
-        return 'news';
-    }
-
     /**
      * Все новости в формате [$newsId][ {'id', 'title', 'message', 'categoryid'} ]
      * @return array
      */
-    public static function getAllNews(): array
+    public function getAllNews(): array
     {
-        return static::getData();
+        return $this->getData();
     }
 
     /**
@@ -111,10 +74,10 @@ class News
      * @param int $id
      * @return array
      */
-    public static function getNewsById(int $id): array
+    public function getNewsById(int $id): array
     {
-        if (array_key_exists($id, static::getData()))
-            return static::getData()[$id];
+        if (array_key_exists($id, $this->getData()))
+            return $this->getData()[$id];
         else
             return [];
     }
@@ -124,9 +87,9 @@ class News
      * @param int $categoryId
      * @return array
      */
-    public static function getNewsByCategory(int $categoryId): array
+    public function getNewsByCategory(int $categoryId): array
     {
-        $res = array_filter(static::getData(),
+        $res = array_filter($this->getData(),
             function ($elem) use ($categoryId) {
                 return array_key_exists('categoryId', $elem)
                     && $elem['categoryId'] == $categoryId;

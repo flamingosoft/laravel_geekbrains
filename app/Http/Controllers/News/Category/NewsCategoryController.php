@@ -10,16 +10,16 @@ use Illuminate\Routing\Controller;
 class NewsCategoryController extends Controller
 {
     public static function index() {
-        return view('news.category.all')->with('categories', Categories::getAllCategories());
+        return view('news.category.all')->with('categories', Categories::factory()->getAllCategories());
     }
 
     public static function getAllNewsByCategorySlug($categorySlug)
     {
-        $categoryId = Categories::getCategoryByTitle($categorySlug);
+        $categoryId = Categories::factory()->getCategoryByTitle($categorySlug);
         return view('news.category.bySlug',
             [
-                'news' => News::getNewsByCategory($categoryId),
-                'category' => Categories::getCategoryById($categoryId)
+                'news' => News::factory()->getNewsByCategory($categoryId),
+                'category' => Categories::factory()->getCategoryById($categoryId)
             ]);
     }
 }

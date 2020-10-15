@@ -17,8 +17,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $categories = Categories::getAllCategories();
-        $news = News::getAllNews();
+        $categories = Categories::factory()->getAllCategories();
+        $news = News::factory()->getAllNews();
         return view('news.all')
             ->with('news', $news)
             ->with('categories', $categories);
@@ -43,6 +43,6 @@ class NewsController extends Controller
     {
         //      dump($newsId);
         return view('news.id')
-            ->with("new", News::getNewsById($newsId));
+            ->with("new", News::factory()->getNewsById($newsId));
     }
 }
