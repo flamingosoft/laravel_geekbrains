@@ -1,5 +1,7 @@
 @extends('layout.layout')
 
+@section('title', 'By ')
+
 @section('menu')
     @include('news.menu')
 @endsection

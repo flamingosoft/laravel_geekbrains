@@ -1,5 +1,7 @@
 @extends('layout.layout')
 
+@section('title', 'Main page')
+
 @section('menu')
     @include('menu')
 {{--    @if (Route::has('login'))--}}

@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Alexander Khayev laravel homework</title>
+    <title>Alexander Khayev laravel homework: @yield('title')</title>
 
     <!-- Bootstrap core CSS -->
     {{--    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">--}}

@@ -25,8 +25,14 @@ class NewsDataTest extends TestCase
     }
 
     public function testRoutes() {
-        $response = $this->get(route('home'));
-        $response->assertStatus(200);
+        $this->assertTrue($this->isTitle('home', 'Alexander Khayev laravel homework: Main page'));
+        $this->assertTrue($this->isTitle('about', 'Alexander Khayev laravel homework: About Us'));
+        $this->assertTrue($this->isTitle('news.home', 'Alexander Khayev laravel homework: All news'));
+//        $response->assertStatus(200);
+    }
+
+    protected function isTitle($route, $title) {
+      return  strpos($this->get(route($route))->content(), $title) > 0;
     }
 
     protected function is_correct_structure($object) {
