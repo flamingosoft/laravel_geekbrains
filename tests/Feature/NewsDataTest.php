@@ -29,7 +29,7 @@ class NewsDataTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function is_correct_structure($object) {
+    protected function is_correct_structure($object) {
         return is_array($object) &&
             !is_null($object[0]);
     }
